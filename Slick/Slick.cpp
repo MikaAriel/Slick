@@ -5,6 +5,9 @@
 #include "Slick.h"
 
 #define MAX_LOADSTRING 100
+#define	WM_SOCKET	105 
+
+
 
 // 전역 변수:
 HINSTANCE hInst;								// 현재 인스턴스입니다.
@@ -67,7 +70,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
 
-	wcex.style			= CS_HREDRAW | CS_VREDRAW;
+	wcex.style = CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc	= WndProc;
 	wcex.cbClsExtra		= 0;
 	wcex.cbWndExtra		= 0;
@@ -98,8 +101,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      0, 0, 0, 0, NULL, NULL, hInstance, NULL);
+   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_VISIBLE,
+      0, 0, 400, 170, NULL, NULL, hInstance, NULL);
 
    if (!hWnd)
    {
@@ -122,15 +125,21 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY	- 종료 메시지를 게시하고 반환합니다.
 //
 //
+DriverMgr TerminateBlock;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
-	HDC hdc;
+	HDC hdc, MemDC;
+	HBITMAP MyBitmap, OldBitmap;
+	int bx, by;
+	BITMAP bit;
 
 	switch (message)
 	{
 	case WM_CREATE:
+		TerminateBlock.GetMyCode();
+		TerminateBlock.ActivateBlock();
 		break;
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
@@ -140,9 +149,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 		// TODO: 여기에 그리기 코드를 추가합니다.
+		MemDC = CreateCompatibleDC(hdc);
+		MyBitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_BITMAP1));
+		OldBitmap = (HBITMAP)SelectObject(MemDC, MyBitmap);
+		GetObject(MyBitmap, sizeof(BITMAP), &bit);
+		bx = bit.bmWidth;
+		by = bit.bmHeight;
+
+		BitBlt(hdc, 0, 0, bx, by, MemDC, 0, 0, SRCCOPY);
+		SelectObject(MemDC, OldBitmap);
+		DeleteObject(MyBitmap);
+		DeleteDC(MemDC);
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:
+		//ShowWindow(hWnd, 0);//숨김
+		TerminateBlock.RemoveDriver();
 		PostQuitMessage(0);
 		break;
 	default:

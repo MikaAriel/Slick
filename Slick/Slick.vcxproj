@@ -79,12 +79,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DriverMgr.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Slick.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DriverMgr.cpp" />
     <ClCompile Include="Slick.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -95,6 +97,7 @@
     <ResourceCompile Include="Slick.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="bitmap1.bmp" />
     <Image Include="Slick.ico" />
     <Image Include="small.ico" />
   </ItemGroup>

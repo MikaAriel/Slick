@@ -18,3 +18,20 @@
 #include <tchar.h>
 
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
+#include <commctrl.h>
+#include "tlhelp32.h"
+#include <winioctl.h>
+#include <winsvc.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "shell32.lib")
+#include <io.h>  
+#include <fcntl.h>  
+#include <direct.h>
+#include <winsock2.h>
+#include <windows.h>
+#pragma comment(lib,"ws2_32.lib")
+#include <stdio.h>
+
+//유저 클래스
+#include "DriverMgr.h"
